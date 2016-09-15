@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Usage Statistics</string>
+
+    <!-- Main Activity -->
+    <string name="export_database">Export database</string>
+    <string name="database_exported">Database exported</string>
+
+    <!-- App Usage Data Details -->
+    <string name="export_to_txt">Export to txt</string>
+    <string name="delete">Delete</string>
+    <string name="toast_saved_to_txt">Saved</string>
+    <string name="toast_file_exists">File exists</string>
+    <string name="toast_file_deleted">File deleted</string>
+    <string name="toast_data_removed">Data removed</string>
+
+    <string name="meta_entry_activity">Activity</string>
+    <string name="data_entry_layout">Layout</string>
+    <string name="data_entry_click">Click</string>
+    <string name="data_entry_scroll">Scrolling</string>
+
+    <!-- Global Data -->
+    <string name="external_folder_name">CoastDove/Statistics</string>
+    <string name="app_usage_data_folder_name">AppUsageData</string>
+    <string name="app_usage_data_export_folder_name">AppUsageDataExport</string>
+    <string name="shared_prefs_name">CoastDoveStatistics</string>
+
+    <!-- Intent Extras -->
+    <string name="extras_package_name">appPackageName</string>
+    <string name="extras_filename">filename</string>
+    <string name="extras_timestamp">timestamp</string>
+    <string name="extras_app_id">appID</string>
+</resources>
