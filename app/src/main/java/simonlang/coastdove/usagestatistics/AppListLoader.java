@@ -19,9 +19,12 @@
 package simonlang.coastdove.usagestatistics;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -31,13 +34,13 @@ import simonlang.coastdove.usagestatistics.usage.sql.AppUsageDbHelper;
 /**
  * Loader for a list of apps to which usage data exists
  */
-public class AppListLoader extends AsyncTaskLoader<ArrayList<String>> {
+public class AppListLoader extends AsyncTaskLoader<ArrayList<ApplicationInfo>> {
     public AppListLoader(Context context) {
         super(context);
     }
 
     @Override
-    public ArrayList<String> loadInBackground() {
+    public ArrayList<ApplicationInfo> loadInBackground() {
         AppUsageDbHelper dbHelper = new AppUsageDbHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -46,12 +49,19 @@ public class AppListLoader extends AsyncTaskLoader<ArrayList<String>> {
 
         Cursor c = db.query(AppUsageContract.AppTable.TABLE_NAME,
                 projection, null, null, groupBy, null, null);
-        ArrayList<String> data = new ArrayList<>(c.getCount());
+        ArrayList<ApplicationInfo> data = new ArrayList<>(c.getCount());
         c.moveToFirst();
         while (!c.isAfterLast()) {
             String appPackageName = c.getString(0);
-            if (appPackageName != null)
-                data.add(appPackageName);
+            if (appPackageName != null) {
+                PackageManager packageManager = getContext().getPackageManager();
+                try {
+                    ApplicationInfo appInfo = packageManager.getApplicationInfo(appPackageName, 0);
+                    data.add(appInfo);
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.e("AppListLoader", "Unable to find app " + appPackageName + ": " + e.getMessage());
+                }
+            }
             c.moveToNext();
         }
         c.close();
