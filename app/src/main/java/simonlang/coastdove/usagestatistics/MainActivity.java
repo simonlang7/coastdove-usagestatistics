@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+
+        FileHelper.checkExternalStoragePermissions(this);
     }
 
     @Override

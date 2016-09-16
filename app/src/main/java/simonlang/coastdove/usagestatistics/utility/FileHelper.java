@@ -18,10 +18,14 @@
 
 package simonlang.coastdove.usagestatistics.utility;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -52,6 +56,11 @@ import simonlang.coastdove.usagestatistics.usage.sql.AppUsageDbHelper;
  */
 public class FileHelper {
     public static final String EXPORTED_DB_FILENAME = "Exported.sqlite";
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     /**
      * Type of directory, to be used when referring to a file
@@ -270,5 +279,12 @@ public class FileHelper {
     private static void makeParentDir(File file) {
         File path = file.getParentFile();
         path.mkdirs();
+    }
+
+    public static void checkExternalStoragePermissions(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
     }
 }
