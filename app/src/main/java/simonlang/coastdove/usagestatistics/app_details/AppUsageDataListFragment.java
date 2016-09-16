@@ -43,7 +43,7 @@ import simonlang.coastdove.usagestatistics.usage.sql.SQLiteDataRemover;
 
 
 /**
- * ListFragment displayed in the DetectableAppDetailsActivity,
+ * ListFragment displayed in AppDetailsActivity,
  * shows a list of collected usage data for the according app
  */
 public class AppUsageDataListFragment extends LoadableListFragment<AppUsageDataUIContainer> {

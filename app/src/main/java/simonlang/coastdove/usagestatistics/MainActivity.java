@@ -1,3 +1,21 @@
+/*  Coast Dove
+    Copyright (C) 2016  Simon Lang
+    Contact: simon.lang7 at gmail dot com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package simonlang.coastdove.usagestatistics;
 
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +25,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import simonlang.coastdove.lib.CoastDoveModules;
 import simonlang.coastdove.usagestatistics.utility.FileHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_register:
+                ArrayList<String> associatedApps = new ArrayList<>(1);
+                associatedApps.add("*");
+                CoastDoveModules.registerModule(this, StatisticsListener.class, getString(R.string.app_name), associatedApps);
+                return true;
             case R.id.item_export_db:
                 new Thread(new Runnable() {
                     @Override
