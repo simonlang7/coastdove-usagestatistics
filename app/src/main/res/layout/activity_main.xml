@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main_toolbar"
@@ -19,7 +19,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="simonlang.coastdove.usagestatistics.AppsListFragment"
+        android:name="simonlang.coastdove.usagestatistics.ui.main.AppsListFragment"
         android:id="@+id/fragment_apps_list"
         android:layout_gravity="center_horizontal"
         tools:layout="@layout/simple_list_item_1" />

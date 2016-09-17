@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simonlang.coastdove.usagestatistics;
+package simonlang.coastdove.usagestatistics.ui.main;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

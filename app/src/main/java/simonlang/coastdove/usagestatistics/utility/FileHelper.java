@@ -47,6 +47,7 @@ import java.io.OutputStreamWriter;
 import java.io.StreamCorruptedException;
 import java.util.HashMap;
 
+import simonlang.coastdove.lib.AppMetaInformation;
 import simonlang.coastdove.usagestatistics.R;
 import simonlang.coastdove.usagestatistics.usage.sql.AppUsageDbHelper;
 
@@ -55,6 +56,7 @@ import simonlang.coastdove.usagestatistics.usage.sql.AppUsageDbHelper;
  * A collection of functions to help with reading from and writing to files
  */
 public class FileHelper {
+    public static final String APP_META_INFORMATION_FILENAME = "AppMetaInformation.bin";
     public static final String EXPORTED_DB_FILENAME = "Exported.sqlite";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -223,6 +225,49 @@ public class FileHelper {
         } finally {
             dbHelper.close();
         }
+    }
+
+    public static void writeAppMetaInformation(Context context, AppMetaInformation metaInformation, Directory directory, String appPackageName, String filename) {
+        File file = getFile(context, directory, appPackageName, filename);
+        if (file == null)
+            throw new RuntimeException("Cannot write to " + file.getAbsolutePath());
+
+        makeParentDir(file);
+
+        try (FileOutputStream fos = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(metaInformation);
+        } catch (FileNotFoundException e) {
+            Log.e("FileHelper", "File not found: " + file.getAbsolutePath());
+            Log.e("FileHelper", e.getMessage());
+        } catch (IOException e) {
+            Log.e("FileHelper", "Input/Output error (" + file.getAbsoluteFile() + "): " + e.getMessage());
+        }
+        scanFile(context, file.getAbsolutePath());
+    }
+
+    public static AppMetaInformation readAppMetaInformation(Context context, Directory directory, String appPackageName, String filename) {
+        File file = getFile(context, directory, appPackageName, filename);
+        if (file == null)
+            throw new RuntimeException("Cannot read from " + file.getAbsolutePath());
+
+        AppMetaInformation result = null;
+        try (FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis)) {
+            result = (AppMetaInformation)ois.readObject();
+        } catch (FileNotFoundException e) {
+            Log.e("FileHelper", "File not found: " + file.getAbsolutePath());
+            Log.e("FileHelper", e.getMessage());
+        } catch (StreamCorruptedException e) {
+            Log.e("FileHelper", "Stream corrupted: " + file.getAbsolutePath());
+            Log.e("FileHelper", e.getMessage());
+        } catch (IOException e) {
+            Log.e("FileHelper", "Input/Output error (" + file.getAbsoluteFile() + "): " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            Log.e("FileHelper", "Class not found (" + file.getAbsoluteFile() + "): " + e.getMessage());
+        }
+
+        return result;
     }
 
     public static boolean deleteFile(Context context, Directory directory, String appPackageName, String filename) {

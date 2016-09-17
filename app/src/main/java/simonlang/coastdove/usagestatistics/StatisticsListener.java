@@ -36,6 +36,7 @@ import simonlang.coastdove.usagestatistics.usage.AppUsageDataProcessor;
 import simonlang.coastdove.usagestatistics.usage.NotificationEvent;
 import simonlang.coastdove.usagestatistics.usage.sql.AppUsageDbHelper;
 import simonlang.coastdove.usagestatistics.usage.sql.SQLiteWriter;
+import simonlang.coastdove.usagestatistics.utility.FileHelper;
 
 /**
  * Listener to collect app usage statistics using data from CoastDove
@@ -44,10 +45,13 @@ public class StatisticsListener extends CoastDoveListenerService {
     /** Session of collected usage data for each app, identified by its package name
      * (starts when the app is opened and ends when it's closed) */
     private transient Map<String, AppUsageData> mCurrentAppUsageData;
+    /** Meta information for each app, identified by its package name */
+    private transient Map<String, AppMetaInformation> mAppMetaInformationMap;
 
     @Override
     protected void onServiceBound() {
         mCurrentAppUsageData = new HashMap<>();
+        mAppMetaInformationMap = new HashMap<>();
     }
 
     @Override
@@ -55,7 +59,34 @@ public class StatisticsListener extends CoastDoveListenerService {
     }
 
     @Override
-    protected void onAppStarted() {
+    protected void onAppEnabled(String appPackageName) {
+        // Get meta information from file. If it fails, request it from Coast Dove core.
+        if (FileHelper.fileExists(this, FileHelper.Directory.PRIVATE_PACKAGE, appPackageName, FileHelper.APP_META_INFORMATION_FILENAME)) {
+            AppMetaInformation appMetaInformation = FileHelper.readAppMetaInformation(this, FileHelper.Directory.PRIVATE_PACKAGE, appPackageName,
+                    FileHelper.APP_META_INFORMATION_FILENAME);
+            if (appMetaInformation != null) {
+                mAppMetaInformationMap.put(appPackageName, appMetaInformation);
+                return;
+            }
+        }
+
+        requestMetaInformation(appPackageName);
+    }
+
+    @Override
+    protected void onAppDisabled(String appPackageName) {
+        Log.d("Listener", "App disabled: " + appPackageName);
+    }
+
+    @Override
+    protected void onMetaInformationDelivered(String appPackageName, AppMetaInformation appMetaInformation) {
+        mAppMetaInformationMap.put(appPackageName, appMetaInformation);
+        FileHelper.writeAppMetaInformation(this, appMetaInformation, FileHelper.Directory.PRIVATE_PACKAGE, appPackageName,
+                FileHelper.APP_META_INFORMATION_FILENAME);
+    }
+
+    @Override
+    protected void onAppOpened() {
         String appPackageName = getLastAppPackageName();
         mCurrentAppUsageData.put(appPackageName, new AppUsageData(appPackageName));
     }
@@ -66,8 +97,13 @@ public class StatisticsListener extends CoastDoveListenerService {
         String appPackageName = getLastAppPackageName();
         AppUsageData appUsageData = mCurrentAppUsageData.get(appPackageName);
         appUsageData.finish();
-        // TODO: Replace app meta information stuff
-        AppUsageDataProcessor processor = new AppUsageDataProcessor(new AppMetaInformation(appPackageName, new LinkedList<String>()), appUsageData);
+
+        AppMetaInformation appMetaInformation;
+        if (mAppMetaInformationMap.containsKey(appPackageName))
+            appMetaInformation = mAppMetaInformationMap.get(appPackageName);
+        else
+            appMetaInformation = new AppMetaInformation(appPackageName, new LinkedList<String>());
+        AppUsageDataProcessor processor = new AppUsageDataProcessor(appMetaInformation, appUsageData);
         processor.process();
         new Thread(new SQLiteWriter(getApplicationContext(), appUsageData)).start();
 

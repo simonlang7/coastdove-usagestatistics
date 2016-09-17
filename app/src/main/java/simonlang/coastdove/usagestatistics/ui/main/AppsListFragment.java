@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simonlang.coastdove.usagestatistics;
+package simonlang.coastdove.usagestatistics.ui.main;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -24,12 +24,13 @@ import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import simonlang.coastdove.usagestatistics.app_details.AppDetailsActivity;
+import simonlang.coastdove.usagestatistics.LoadableListFragment;
+import simonlang.coastdove.usagestatistics.R;
+import simonlang.coastdove.usagestatistics.ui.app_details.AppDetailsActivity;
 
 /**
  * ListFragment containing all apps that have usage data

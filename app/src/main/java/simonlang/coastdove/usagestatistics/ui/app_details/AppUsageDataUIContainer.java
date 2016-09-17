@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simonlang.coastdove.usagestatistics.app_details;
+package simonlang.coastdove.usagestatistics.ui.app_details;
 
 /**
  * Contains information on an app usage data object, needed for the UI

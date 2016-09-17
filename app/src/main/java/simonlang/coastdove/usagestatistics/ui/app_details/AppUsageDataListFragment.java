@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simonlang.coastdove.usagestatistics.app_details;
+package simonlang.coastdove.usagestatistics.ui.app_details;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +38,7 @@ import java.util.List;
 
 import simonlang.coastdove.usagestatistics.LoadableListFragment;
 import simonlang.coastdove.usagestatistics.R;
-import simonlang.coastdove.usagestatistics.app_usage_data_details.AppUsageDataDetailsActivity;
+import simonlang.coastdove.usagestatistics.ui.app_usage_data_details.AppUsageDataDetailsActivity;
 import simonlang.coastdove.usagestatistics.usage.sql.SQLiteDataRemover;
 
 

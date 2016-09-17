@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package simonlang.coastdove.usagestatistics;
+package simonlang.coastdove.usagestatistics.ui.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +28,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import simonlang.coastdove.lib.CoastDoveModules;
+import simonlang.coastdove.usagestatistics.R;
+import simonlang.coastdove.usagestatistics.StatisticsListener;
 import simonlang.coastdove.usagestatistics.utility.FileHelper;
 
 public class MainActivity extends AppCompatActivity {
