@@ -75,7 +75,6 @@ public class StatisticsListener extends CoastDoveListenerService {
 
     @Override
     protected void onAppDisabled(String appPackageName) {
-        Log.d("Listener", "App disabled: " + appPackageName);
     }
 
     @Override
