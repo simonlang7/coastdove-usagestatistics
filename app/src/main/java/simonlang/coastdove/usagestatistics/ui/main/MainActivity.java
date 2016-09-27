@@ -55,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_register:
-                ArrayList<String> associatedApps = new ArrayList<>(1);
-                associatedApps.add("*");
-                CoastDoveModules.registerModule(this, StatisticsListener.class, getString(R.string.app_name), associatedApps);
+                CoastDoveModules.registerModule(this, StatisticsListener.class, getString(R.string.app_name), "*");
                 return true;
             case R.id.item_export_db:
                 new Thread(new Runnable() {

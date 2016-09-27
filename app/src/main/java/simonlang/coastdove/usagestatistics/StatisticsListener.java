@@ -20,6 +20,7 @@ package simonlang.coastdove.usagestatistics;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import simonlang.coastdove.lib.AppMetaInformation;
 import simonlang.coastdove.lib.CoastDoveListenerService;
 import simonlang.coastdove.lib.EventType;
 import simonlang.coastdove.lib.InteractionEventData;
+import simonlang.coastdove.lib.ScrollPosition;
+import simonlang.coastdove.lib.ViewTreeNode;
 import simonlang.coastdove.usagestatistics.usage.AppUsageData;
 import simonlang.coastdove.usagestatistics.usage.AppUsageDataProcessor;
 import simonlang.coastdove.usagestatistics.usage.NotificationEvent;
@@ -164,5 +167,28 @@ public class StatisticsListener extends CoastDoveListenerService {
             appUsageData.addScreenOffEntry();
         else
             appUsageData.finishScreenOffEntry();
+    }
+
+    @Override
+    protected void onScrollPositionDetected(ScrollPosition scrollPosition) {
+        AppUsageData appUsageData = mCurrentAppUsageData.get(getLastAppPackageName());
+        boolean shallLog = appUsageData.addScrollPositionDataEntry(scrollPosition);
+        if (shallLog)
+            Log.i("Scroll position", scrollPosition.toString());
+    }
+
+    @Override
+    protected void onViewTreeReceived(ViewTreeNode viewTreeNode) {
+
+    }
+
+    @Override
+    protected void onActionFailed(ViewTreeNode node, AccessibilityNodeInfo.AccessibilityAction accessibilityAction) {
+
+    }
+
+    @Override
+    protected void onActionSuccessful(ViewTreeNode node, AccessibilityNodeInfo.AccessibilityAction accessibilityAction) {
+
     }
 }

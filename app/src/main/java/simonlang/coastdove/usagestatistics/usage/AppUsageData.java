@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import simonlang.coastdove.lib.EventType;
+import simonlang.coastdove.lib.ScrollPosition;
 import simonlang.coastdove.usagestatistics.usage.sql.AppUsageContract;
 import simonlang.coastdove.usagestatistics.utility.Misc;
 import simonlang.coastdove.lib.InteractionEventData;
@@ -202,6 +203,14 @@ public class AppUsageData {
     public boolean addScreenOffEntry() {
         Date timestamp = new Date();
         return addScreenOffEntry(timestamp);
+    }
+
+    /**
+     * Adds scroll position entry
+     */
+    public boolean addScrollPositionDataEntry(ScrollPosition scrollPosition) {
+        Date timestamp = new Date();
+        return activityDataList.peekLast().addScrollPositionDataEntry(timestamp, "", scrollPosition);
     }
 
     /**

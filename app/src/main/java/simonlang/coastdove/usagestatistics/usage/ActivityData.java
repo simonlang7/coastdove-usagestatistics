@@ -36,6 +36,7 @@ import java.util.Set;
 
 import simonlang.coastdove.lib.EventType;
 import simonlang.coastdove.lib.InteractionEventData;
+import simonlang.coastdove.lib.ScrollPosition;
 import simonlang.coastdove.usagestatistics.usage.sql.AppUsageContract;
 import simonlang.coastdove.usagestatistics.utility.Misc;
 
@@ -80,6 +81,7 @@ public class ActivityData {
             EventType eventType = ActivityDataEntry.entryTypeFromString(type);
             switch (eventType) {
                 case CLICK:
+                case SCROLLING:
                 case LONG_CLICK:
                     result.dataEntries.add(InteractionDataEntry.fromSQLiteDB(db, entryTimestamp, activity,
                             eventType, count, dataEntryID));
@@ -90,6 +92,11 @@ public class ActivityData {
                     break;
                 case LAYOUTS:
                     result.dataEntries.add(LayoutDataEntry.fromSQLiteDB(db, entryTimestamp, activity,
+                            count, dataEntryID));
+                    break;
+                case SCROLL_POSITION:
+                    Log.d("FROM SQL", "SCROLL POSITION");
+                    result.dataEntries.add(ScrollPositionDataEntry.fromSQLiteDB(db, entryTimestamp, activity,
                             count, dataEntryID));
                     break;
             }
@@ -237,6 +244,20 @@ public class ActivityData {
             return false;
     }
 
+    public boolean addScrollPositionDataEntry(Date timestamp, String activity, ScrollPosition scrollPosition) {
+        ScrollPositionDataEntry last = findLastAdjacentScrollPositionEntry();
+        if (last != null && last.getItemCount() == scrollPosition.getItemCount()) {
+            last.update(scrollPosition.getFromIndex(), scrollPosition.getToIndex(), scrollPosition.getItemCount());
+            return false;
+        }
+        else {
+            ScrollPositionDataEntry entry = new ScrollPositionDataEntry(timestamp, activity, scrollPosition.getFromIndex(),
+                    scrollPosition.getToIndex(), scrollPosition.getItemCount());
+            this.dataEntries.add(entry);
+            return true;
+        }
+    }
+
     /**
      * Returns an array with each data entry data converted to a String
      * @return An array of all data entries converted to Strings
@@ -330,6 +351,24 @@ public class ActivityData {
             ActivityDataEntry entry = it.next();
             if (entry.getClass().equals(classType)) {
                 return entry;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * When scrolling, we only want to get the last position (when scrolling stops),
+     * otherwise we get spammed with entries
+     */
+    private ScrollPositionDataEntry findLastAdjacentScrollPositionEntry() {
+        Iterator<ActivityDataEntry> it = this.dataEntries.descendingIterator();
+        while (it.hasNext()) {
+            ActivityDataEntry entry = it.next();
+            EventType type = EventType.valueOf(entry.getType());
+            if (type == EventType.CLICK || type == EventType.LONG_CLICK || type == EventType.SCREEN_OFF)
+                return null;
+            else if (entry instanceof ScrollPositionDataEntry) {
+                return (ScrollPositionDataEntry)entry;
             }
         }
         return null;

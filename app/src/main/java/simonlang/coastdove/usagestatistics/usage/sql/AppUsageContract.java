@@ -80,6 +80,10 @@ public final class AppUsageContract {
 
     public static abstract class ScrollDetailsTable implements BaseColumns {
         public static final String TABLE_NAME = "scroll_details";
+        public static final String COLUMN_NAME_DATA_ENTRY_ID = "data_entry_id";
+        public static final String COLUMN_NAME_FROM = "from_index";
+        public static final String COLUMN_NAME_TO = "to_index";
+        public static final String COLUMN_NAME_ITEM_COUNT = "item_count";
     }
 
     private static final String TEXT_TYPE = " TEXT";
@@ -170,6 +174,16 @@ public final class AppUsageContract {
 
     public static final String SQL_DELETE_SCREEN_OFF_DETAILS =
             "DROP TABLE IF EXISTS " + ScreenOffDetailsTable.TABLE_NAME;
+
+    public static final String SQL_CREATE_SCROLL_DETAILS =
+            "CREATE TABLE " + ScrollDetailsTable.TABLE_NAME + " (" +
+                    ScrollDetailsTable._ID + " INTEGER PRIMARY KEY," +
+                    ScrollDetailsTable.COLUMN_NAME_DATA_ENTRY_ID + " INTEGER" + COMMA_SEP +
+                    ScrollDetailsTable.COLUMN_NAME_FROM + " INTEGER" + COMMA_SEP +
+                    ScrollDetailsTable.COLUMN_NAME_TO + " INTEGER" + COMMA_SEP +
+                    ScrollDetailsTable.COLUMN_NAME_ITEM_COUNT + " INTEGER" + COMMA_SEP +
+                    "FOREIGN KEY (" + ScrollDetailsTable.COLUMN_NAME_DATA_ENTRY_ID + ") REFERENCES " + DataEntryTable.TABLE_NAME + "(" + DataEntryTable._ID + ")"
+                    + " )";
 
     public static final String SQL_DELETE_SCROLL_DETAILS =
             "DROP TABLE IF EXISTS " + ScrollDetailsTable.TABLE_NAME;

@@ -36,18 +36,22 @@ import simonlang.coastdove.usagestatistics.utility.Misc;
  */
 public abstract class ActivityDataEntry {
     public static EventType entryTypeFromString(String type) {
-        if (type.equals(EventType.LAYOUTS.name()))
-            return EventType.LAYOUTS;
-        if (type.equals(EventType.CLICK.name()))
-            return EventType.CLICK;
-        if (type.equals(EventType.LONG_CLICK.name()))
-            return EventType.LONG_CLICK;
-        if (type.equals(EventType.SCROLLING.name()))
-            return EventType.SCROLLING;
-        if (type.equals(EventType.SCREEN_OFF.name()))
-            return EventType.SCREEN_OFF;
-        else
-            return EventType.OTHER;
+        return EventType.valueOf(type);
+
+//        if (type.equals(EventType.LAYOUTS.name()))
+//            return EventType.LAYOUTS;
+//        if (type.equals(EventType.CLICK.name()))
+//            return EventType.CLICK;
+//        if (type.equals(EventType.LONG_CLICK.name()))
+//            return EventType.LONG_CLICK;
+//        if (type.equals(EventType.SCROLLING.name()))
+//            return EventType.SCROLLING;
+//        if (type.equals(EventType.SCREEN_OFF.name()))
+//            return EventType.SCREEN_OFF;
+//        if (type.equals(EventType.SCROLL_POSITION.name()))
+//            return EventType.SCROLL_POSITION;
+//        else
+//            return EventType.OTHER;
     }
 
     /** Time at which these data were collected */

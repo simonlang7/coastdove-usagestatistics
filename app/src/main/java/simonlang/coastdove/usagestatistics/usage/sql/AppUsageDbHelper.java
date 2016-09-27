@@ -28,7 +28,7 @@ import android.util.Log;
  * Helper to access SQLite database for app usage data
  */
 public class AppUsageDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 12;
     public static final String DATABASE_NAME = "AppUsageData.db";
 
 
@@ -45,6 +45,7 @@ public class AppUsageDbHelper extends SQLiteOpenHelper {
         db.execSQL(AppUsageContract.SQL_CREATE_INTERACTION_DETAILS);
         db.execSQL(AppUsageContract.SQL_CREATE_LAYOUT_DETAILS);
         db.execSQL(AppUsageContract.SQL_CREATE_SCREEN_OFF_DETAILS);
+        db.execSQL(AppUsageContract.SQL_CREATE_SCROLL_DETAILS);
     }
 
     @Override
